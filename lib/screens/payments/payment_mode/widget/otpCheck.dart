@@ -1,84 +1,128 @@
-import 'package:ecityuser/components/addressFilter.dart';
-import 'package:ecityuser/components/keyboardSIze.dart';
-import 'package:ecityuser/components/language/allTranslations.dart';
-import 'package:ecityuser/components/widget/appbar.dart';
-import 'package:ecityuser/components/widget/pinSetWidget.dart';
+import 'package:ecitykiosk/screens/common/common_appBar.dart';
+import 'package:ecitykiosk/screens/payments/payment_mode/payment_mode_view_model.dart';
+import 'package:ecitykiosk/utils/app_colors.dart';
+import 'package:ecitykiosk/utils/common_widgets.dart';
+import 'package:ecitykiosk/utils/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:keyboard_utils/widgets.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
 
-class otpDialog extends StatefulWidget {
-  otpDialog({Key? key, this.pin}) : super(key: key);
-  var pin;
+class OtpScreen extends StatefulWidget {
+  const OtpScreen({Key? key}) : super(key: key);
+  static const String routeName = "/otpScreen";
 
   @override
-  _otpDialogState createState() => _otpDialogState();
+  _OtpScreenState createState() => _OtpScreenState();
 }
 
-class _otpDialogState extends State<otpDialog> {
-  var PinData = "";
+class _OtpScreenState extends State<OtpScreen> {
+  @override
+  void initState() {
+    getViewModel<PaymentModeViewModel>(context, (viewModel) {
+      viewModel.pinMatchedSuccess = (userId) {
+        Navigator.pop(context, userId);
+      };
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: appBarWidget(
-        text: allTranslations.text('CheckPinCode'),
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/pincode.png',
-                    height: 200,
+    String userId = ModalRoute.of(context)?.settings.arguments as String;
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.white,
+          appBar: commonAppBar(
+              title: const Text(
+                "OTP Screen",
+                style: TextStyle(
+                    fontFamily: "Josefin_Sans",
+                    fontSize: 22,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700),
+              ),
+              isCenter: true),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        'assets/images/pincode.png',
+                        height: 200,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Container(
-                height: 100.0,
-                child: pinSetWidget(
-                  context: context,
-                  onChanged: (value) {
-                    checkPin(value);
+                const SizedBox(height: 20.0),
+                Container(
+                  height: 100.0,
+                  margin: const EdgeInsets.all(20.0),
+                  child: PinCodeTextField(
+                    onChanged: (value) {
+                      print(value);
+                      if (value.length >= 4 &&
+                          !context.read<PaymentModeViewModel>().isLoading) {
+                        context
+                            .read<PaymentModeViewModel>()
+                            .pinMatch(userId: userId, pin: value);
+                      }
+                    },
+                    appContext: context,
+                    autoDismissKeyboard: true,
+                    pastedTextStyle: const TextStyle(
+                      color: Color(0xffC4C4C4),
+                    ),
+                    validator: (v) {
+                      if (v!.length < 3) {
+                        return "";
+                      } else {
+                        return null;
+                      }
+                    },
+                    pinTheme: PinTheme(
+                      shape: PinCodeFieldShape.circle,
+                      activeFillColor: AppColors.appColor,
+                      activeColor: AppColors.appColor,
+                      disabledColor: AppColors.appColor,
+                      selectedFillColor: AppColors.appColor,
+                      selectedColor: AppColors.appColor,
+                      inactiveColor: AppColors.appColor,
+                      inactiveFillColor: AppColors.appColor,
+                    ),
+                    obscureText: true,
+                    obscuringCharacter: '*',
+                    animationType: AnimationType.fade,
+                    length: 4,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    textInputAction: TextInputAction.send,
+                    enableActiveFill: true,
+                    beforeTextPaste: (text) {
+                      return true;
+                    },
+                  ),
+                ),
+                const SizedBox(height: 60.0),
+                KeyboardAware(
+                  builder: (context, keyboardConfig) {
+                    return SizedBox(
+                      height: keyboardConfig.keyboardHeight,
+                    );
                   },
                 ),
-              ),
+              ],
             ),
-            SizedBox(
-              height: 60.0,
-            ),
-            keyBoardSize(),
-          ],
+          ),
         ),
-      ),
+        const LoadingIndicatorConsumer<PaymentModeViewModel>()
+      ],
     );
-  }
-
-  checkPin(String value) {
-    if (mounted) if (value.length == 4) {
-      if (widget.pin.toString() == value.toString()) {
-        showToast(allTranslations.text('CorrectPin'));
-        PinData = value.toString();
-        Navigator.pop(context, PinData);
-        return true;
-      } else {
-        showToast(allTranslations.text('IncorrectPin'));
-        Navigator.pop(context);
-        return false;
-      }
-    }
   }
 }
