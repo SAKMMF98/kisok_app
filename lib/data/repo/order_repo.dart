@@ -7,12 +7,9 @@ import 'package:flutter/material.dart';
 
 class OrderRepo {
   Future<Response> confirmOrderApi(Map<String, dynamic> body) async {
-    print(body);
     final response =
         await Networking.instance.post(EndPoints.kOrderUrl, jsonEncode(body));
     final responseJson = jsonDecode(response);
-    debugPrint("Checking Order");
-    print(responseJson);
     bool isSuccess = responseJson["status"] == "200";
     String message = responseJson.containsKey("message")
         ? responseJson["message"]

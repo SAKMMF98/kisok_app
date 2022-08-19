@@ -209,7 +209,6 @@ class Details extends StatelessWidget {
       );
     } else {
       if (details.offers.toString() != "[]") {
-        print("Details ${details.offerPrice}, Price ${details.price}");
         bool discountShow = false;
         try {
           double price = double.parse(

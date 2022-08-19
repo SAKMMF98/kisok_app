@@ -4,6 +4,7 @@ import 'package:ecitykiosk/screens/home/home_screen.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/payment_mode_view_model.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/widget/expansion_panel.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/widget/pay_button.dart';
+import 'package:ecitykiosk/screens/payments/payment_mode/widget/show_invoice.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/widget/web_payment.dart';
 import 'package:ecitykiosk/utils/common_widgets.dart';
 import 'package:ecitykiosk/utils/loading.dart';
@@ -48,9 +49,13 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
         orderSuccess = true;
         if (mounted) setState(() {});
         viewModel.emptyCart();
-        showToast(msg: "Order Done Successfully");
-        launchUrl(Uri.parse(value),
-            mode: LaunchMode.inAppWebView, webOnlyWindowName: "Invoice Page");
+        Navigator.pushNamed(context, InvoicePage.routeName, arguments: value);
+        // viewModel.invoicePage(value);
+      };
+      viewModel.invoiceShow = (String htmlBody) {
+        viewModel.emptyCart();
+        Navigator.pushNamed(context, InvoicePage.routeName,
+            arguments: htmlBody);
       };
       viewModel.orderSuccess =
           ({required CartData cartData, required String txId}) async {

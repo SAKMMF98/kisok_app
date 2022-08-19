@@ -4,6 +4,7 @@ import 'package:ecitykiosk/data/repo/cart_repo.dart';
 import 'package:ecitykiosk/data/repo/order_repo.dart';
 import 'package:ecitykiosk/data/repo/payment_repo.dart';
 import 'package:ecitykiosk/models/cart_model.dart';
+import 'package:ecitykiosk/utils/common_widgets.dart';
 import 'package:ecitykiosk/utils/validations.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   final _orderRepo = OrderRepo();
   final _cartRepo = CartRepo();
   final _paymentRepo = PaymentRepo();
+  ValueChanged<String>? invoiceShow;
   void Function({required String url, required String txId})? openWebView;
   void Function({required CartData cartData, required String userId})?
       userFoundOnECity;
@@ -48,6 +50,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   }
 
   void payNow(CartData cartData) {
+    hideKeyBoard();
     String? isEmail = isValidEmail(emailController.text);
     if (isEmail != null) {
       snackBarText = isEmail;
@@ -68,6 +71,19 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
           break;
       }
     }
+  }
+
+  void invoicePage(String id) {
+    callApi(() async {
+      Map<String, dynamic> body = {"invoice_id": id};
+      Response response = await _paymentRepo.invoiceCall(body);
+      if (response.isSuccessFul) {
+        invoiceShow?.call(response.data.toString());
+      } else {
+        snackBarText="Something Went Wrong With Invoice.";
+        onError?.call();
+      }
+    });
   }
 
   void paymentByECityWallet(CartData cartData) {
@@ -121,7 +137,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
       };
       Response response = await _paymentRepo.paymentWithWallet(data);
       if (response.isSuccessFul) {
-        confirmWithWalletSuccess?.call(response.data);
+        confirmWithWalletSuccess?.call(response.data.toString());
         snackBarText = response.message;
       } else {
         snackBarText = response.message;

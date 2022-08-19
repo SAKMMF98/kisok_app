@@ -1,5 +1,6 @@
 import 'package:ecitykiosk/data/local/shared_pref_helper.dart';
 import 'package:ecitykiosk/screens/cart/cart_view_model.dart';
+import 'package:ecitykiosk/screens/payments/payment_mode/widget/show_invoice.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/widget/web_payment.dart';
 import 'package:ecitykiosk/screens/products/product_details/product_details_screen.dart';
 import 'package:ecitykiosk/screens/stores/recent_store_details/recent_details.dart';
@@ -66,7 +67,8 @@ class RouteHelper {
       OtpScreen.routeName: (_) => ChangeNotifierProvider.value(
             value: _paymentViewModel,
             child: const OtpScreen(),
-          )
+          ),
+      InvoicePage.routeName: (_) => const InvoicePage(),
     };
   }
 

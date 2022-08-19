@@ -67,7 +67,6 @@ class _OtpScreenState extends State<OtpScreen> {
                   margin: const EdgeInsets.all(20.0),
                   child: PinCodeTextField(
                     onChanged: (value) {
-                      print(value);
                       if (value.length >= 4 &&
                           !context.read<PaymentModeViewModel>().isLoading) {
                         context

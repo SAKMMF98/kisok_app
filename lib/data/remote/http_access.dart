@@ -21,10 +21,6 @@ class Networking {
       body: body,
       headers: header,
     );
-    log(header.toString());
-    log(url);
-    log(body);
-    log(res.body);
     return res.body;
   }
 

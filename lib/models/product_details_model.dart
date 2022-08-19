@@ -69,8 +69,6 @@ class ProductDetailsModel {
       this.variants});
 
   ProductDetailsModel.fromJson(Map<String, dynamic> json) {
-    print("Hellio");
-    print(json);
     id = json['id'];
     merchantId = json['merchant_id'];
     storeId = json['store_id'];

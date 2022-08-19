@@ -20,4 +20,5 @@ class EndPoints {
   static const kCheckPaymentUrl = _kBaseUrl + "checkPayment";
   static const kCheckUser = _kBaseUrl + "checkuserid";
   static const kUserPinMatchUrl = _kBaseUrl + "afterpin";
+  static const kInvoicePageUrl = _kBaseUrl + "invoicedetails";
 }
