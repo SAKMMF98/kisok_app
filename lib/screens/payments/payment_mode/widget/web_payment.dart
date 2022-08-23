@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:ecitykiosk/screens/home/home_screen.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/payment_mode_view_model.dart';
+import 'package:ecitykiosk/screens/payments/payment_mode/widget/show_invoice.dart';
 import 'package:ecitykiosk/utils/app_colors.dart';
 import 'package:ecitykiosk/utils/common_widgets.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +20,11 @@ class PaymentWeb extends StatefulWidget {
 }
 
 class _PaymentWebState extends State<PaymentWeb> {
-  final String invoiceSuccess =
-      "https://alphaxtech.net/ecity/index.php/web/notify/return1";
-
   final String returnUr =
       "https://alphaxtech.net/ecityMerchantWeb/index.html#/home/success";
+
+  static bool onceDone = false;
+
   // final String invoiceUrl =
   //     "https://alphaxtech.net/ecity/index.php/web/verify/invoice";
   static ValueNotifier<int> progress = ValueNotifier(0);
@@ -46,13 +47,11 @@ class _PaymentWebState extends State<PaymentWeb> {
   @override
   initState() {
     getViewModel<PaymentModeViewModel>(context, (viewModel) {
-      viewModel.checkPaymentDone = () {
-        showToast(msg: viewModel.snackBarText!);
-        Future.delayed(const Duration(seconds: 3), () async {
-          await webViewController.clearCache();
-          Navigator.pushNamedAndRemoveUntil(
-              context, HomeScreen.routeName, (route) => false);
-        });
+      onceDone = false;
+      if (mounted) setState(() {});
+      viewModel.checkPaymentDone = (orderId) {
+        webViewController.clearCache();
+        Navigator.pushNamed(context, InvoicePage.routeName, arguments: orderId);
       };
       viewModel.checkPaymentFailed = () {
         errorToast(msg: viewModel.snackBarText!);
@@ -69,9 +68,15 @@ class _PaymentWebState extends State<PaymentWeb> {
         ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     return WillPopScope(
       onWillPop: () async {
-        if (currentUrl == invoiceSuccess) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, HomeScreen.routeName, (route) => false);
+        if (currentUrl != null) {
+          if (currentUrl!.contains(
+                  "https://secure.cinetpay.com/notifypay?csrf_token") &&
+              onceDone) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, HomeScreen.routeName, (route) => false);
+          } else {
+            Navigator.pop(context);
+          }
         } else {
           Navigator.pop(context);
         }
@@ -91,14 +96,13 @@ class _PaymentWebState extends State<PaymentWeb> {
                 webViewController = controller;
               },
               onLoadStart: (controller, url) {
+                currentUrl = url.toString();
                 progress.value = 0;
                 error.value = null;
                 if (url.toString() == returnUr) {
-                  webViewController.loadUrl(
-                      urlRequest: URLRequest(url: Uri.parse(invoiceSuccess)));
-                  context
-                      .read<PaymentModeViewModel>()
-                      .checkPayment(txId: paymentData["txId"]!);
+                  errorToast(msg: "Payment Failed!!");
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, HomeScreen.routeName, (route) => false);
                 }
               },
               androidOnPermissionRequest:
@@ -126,6 +130,17 @@ class _PaymentWebState extends State<PaymentWeb> {
                 return NavigationActionPolicy.ALLOW;
               },
               onLoadStop: (controller, url) async {
+                if (url.toString().contains(
+                        "https://secure.cinetpay.com/notifypay?csrf_token") &&
+                    onceDone) {
+                  context.read<PaymentModeViewModel>().checkPayment(
+                      txId: paymentData["txId"]!,
+                      orderId: paymentData["orderId"]!);
+                } else if (url.toString().contains(
+                    "https://secure.cinetpay.com/notifypay?csrf_token")) {
+                  onceDone = true;
+                  if (mounted) setState(() {});
+                }
                 // if (url.toString() == returnUr) {
                 //   webViewController.loadUrl(
                 //       urlRequest: URLRequest(url: Uri.parse(invoiceSuccess)));

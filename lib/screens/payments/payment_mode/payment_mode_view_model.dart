@@ -14,15 +14,19 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   final _orderRepo = OrderRepo();
   final _cartRepo = CartRepo();
   final _paymentRepo = PaymentRepo();
-  ValueChanged<String>? invoiceShow;
-  void Function({required String url, required String txId})? openWebView;
+  void Function(
+      {required String url,
+      required String txId,
+      required String orderId})? openWebView;
   void Function({required CartData cartData, required String userId})?
       userFoundOnECity;
   ValueChanged<String>? pinMatchedSuccess;
   ValueChanged<String>? confirmWithWalletSuccess;
-  void Function({required CartData cartData, required String txId})?
-      orderSuccess;
-  VoidCallback? checkPaymentDone;
+  void Function(
+      {required CartData cartData,
+      required String txId,
+      required String orderId})? orderSuccess;
+  ValueChanged<String>? checkPaymentDone;
   VoidCallback? checkPaymentFailed;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -41,7 +45,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
     notifyListeners();
   }
 
-  set updateExpansionClick(int value) {
+  set updateExpansionClick(int? value) {
     _selectedExpansion = value;
     emailController.clear();
     passwordController.clear();
@@ -71,19 +75,6 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
           break;
       }
     }
-  }
-
-  void invoicePage(String id) {
-    callApi(() async {
-      Map<String, dynamic> body = {"invoice_id": id};
-      Response response = await _paymentRepo.invoiceCall(body);
-      if (response.isSuccessFul) {
-        invoiceShow?.call(response.data.toString());
-      } else {
-        snackBarText="Something Went Wrong With Invoice.";
-        onError?.call();
-      }
-    });
   }
 
   void paymentByECityWallet(CartData cartData) {
@@ -146,30 +137,32 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
     });
   }
 
-  void paymentByCNetWallet({required CartData cartData, required String txId}) {
+  void paymentByCNetWallet(
+      {required CartData cartData,
+      required String txId,
+      required String orderId}) {
     String url;
     try {
       url =
           "https://alphaxtech.net/ecity/index.php/web/Verify/createSignature?user_id=${SharedPrefHelper.userId}&merchant_id=${cartData.storeInfo?.merchantId}&payment_mode=phone&payment_for=2&reference_id=0&order_amount=${cartData.cart?.totalDiscountedPrice}&cpm_trans_id=$txId&store_id=${cartData.storeInfo?.id}";
-      openWebView?.call(url: url, txId: txId);
+      openWebView?.call(url: url, txId: txId, orderId: orderId);
     } catch (_) {
       snackBarText = "Something Went Wrong";
       onError?.call();
     }
   }
 
-  void checkPayment({required String txId}) {
+  void checkPayment({required String txId, required String orderId}) {
     callApi(() async {
       Map<String, String> body = {"cpm_trans_id": txId};
       Response response = await _orderRepo.checkPayment(body);
       emptyCart();
       if (response.isSuccessFul) {
         snackBarText = response.message;
-        checkPaymentDone?.call();
+        checkPaymentDone?.call(orderId);
       } else {
         snackBarText = response.message;
         checkPaymentFailed?.call();
-        onError?.call();
       }
     });
   }
@@ -189,7 +182,8 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
       Response response = await _orderRepo.confirmOrderApi(body);
       if (response.isSuccessFul) {
         snackBarText = response.message;
-        orderSuccess?.call(cartData: cartData, txId: cpmId);
+        orderSuccess?.call(
+            cartData: cartData, txId: cpmId, orderId: response.data);
       } else {
         snackBarText = response.message;
         onError?.call();

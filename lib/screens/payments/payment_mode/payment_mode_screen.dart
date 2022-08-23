@@ -10,7 +10,6 @@ import 'package:ecitykiosk/utils/common_widgets.dart';
 import 'package:ecitykiosk/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'widget/otpCheck.dart';
 
@@ -29,13 +28,13 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
   void initState() {
     super.initState();
     getViewModel<PaymentModeViewModel>(context, (viewModel) {
-      viewModel.emailController.clear();
-      viewModel.passwordController.clear();
-      viewModel.nameController.clear();
-      viewModel.openWebView =
-          ({required String url, required String txId}) async {
+      viewModel.updateExpansionClick = null;
+      viewModel.openWebView = (
+          {required String url,
+          required String txId,
+          required String orderId}) async {
         Navigator.pushNamed(context, PaymentWeb.routeName,
-            arguments: {"initialUrl": url, "txId": txId});
+            arguments: {"initialUrl": url, "txId": txId, "orderId": orderId});
       };
       viewModel.userFoundOnECity =
           ({required CartData cartData, required String userId}) async {
@@ -52,14 +51,12 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
         Navigator.pushNamed(context, InvoicePage.routeName, arguments: value);
         // viewModel.invoicePage(value);
       };
-      viewModel.invoiceShow = (String htmlBody) {
-        viewModel.emptyCart();
-        Navigator.pushNamed(context, InvoicePage.routeName,
-            arguments: htmlBody);
-      };
-      viewModel.orderSuccess =
-          ({required CartData cartData, required String txId}) async {
-        viewModel.paymentByCNetWallet(cartData: cartData, txId: txId);
+      viewModel.orderSuccess = (
+          {required CartData cartData,
+          required String txId,
+          required String orderId}) async {
+        viewModel.paymentByCNetWallet(
+            cartData: cartData, txId: txId, orderId: orderId);
       };
     });
   }
@@ -72,7 +69,7 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
           Navigator.pushNamedAndRemoveUntil(
               context, HomeScreen.routeName, (route) => false);
         }
-        return false;
+        return Future.value(false);
       },
       child: Stack(
         children: [

@@ -2,12 +2,10 @@ import 'package:ecitykiosk/data/local/shared_pref_helper.dart';
 import 'package:ecitykiosk/screens/common/common_appBar.dart';
 import 'package:ecitykiosk/screens/home/home_screen.dart';
 import 'package:ecitykiosk/screens/login/widgets/commonButton.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 // import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class InvoicePage extends StatelessWidget {
   const InvoicePage({Key? key}) : super(key: key);
@@ -23,50 +21,53 @@ class InvoicePage extends StatelessWidget {
         return Future.value(false);
       },
       child: Scaffold(
-          appBar: commonAppBar(
-            title: const Text(
-              "Invoice",
+        appBar: commonAppBar(
+          title: const Text(
+            "Invoice",
+            style: TextStyle(
+                fontFamily: "Josefin_Sans",
+                fontWeight: FontWeight.w700,
+                fontSize: 22,
+                color: Colors.black),
+          ),
+          isCenter: true,
+          leading: IconButton(
+            color: Colors.transparent,
+            onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                context, HomeScreen.routeName, (route) => false),
+            icon: const Icon(
+              Icons.arrow_back_ios_sharp,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+          child: CommonButton(
+            child: const Text(
+              "Print Invoice",
               style: TextStyle(
-                  fontFamily: "Josefin_Sans",
+                  fontFamily: "Josefin Sans Regular",
                   fontWeight: FontWeight.w700,
-                  fontSize: 22,
-                  color: Colors.black),
+                  color: Colors.white,
+                  fontSize: 18),
             ),
-            isCenter: true,
-            leading: IconButton(
-              color: Colors.transparent,
-              onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                  context, HomeScreen.routeName, (route) => false),
-              icon: const Icon(
-                Icons.arrow_back_ios_sharp,
-                color: Colors.black,
-              ),
-            ),
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, HomeScreen.routeName, (route) => false);
+            },
           ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            child: CommonButton(
-              child: const Text(
-                "Print Invoice",
-                style: TextStyle(
-                    fontFamily: "Josefin Sans Regular",
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    fontSize: 18),
-              ),
-              onTap: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, HomeScreen.routeName, (route) => false);
-              },
-            ),
+        ),
+        body: InAppWebView(
+          initialUrlRequest: URLRequest(
+            url: Uri.parse(
+                "https://alphaxtech.net/ecity/index.php/api/users/kiosk/invoicedetails/$orderId"),
+            headers: {
+              'authtoken': SharedPrefHelper.authToken,
+            },
           ),
-          body: InAppWebView(
-              initialUrlRequest: URLRequest(
-                  url: Uri.parse(
-                      "https://alphaxtech.net/ecity/index.php/api/users/kiosk/invoicedetails/$orderId"),
-                  headers: {
-                'authtoken': SharedPrefHelper.authToken,
-              }))),
+        ),
+      ),
     );
   }
 }

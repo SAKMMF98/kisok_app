@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:ecitykiosk/data/remote/end_points.dart';
 import 'package:ecitykiosk/data/remote/http_access.dart';
 import 'package:ecitykiosk/data/remote/response.dart';
-import 'package:flutter/material.dart';
 
 class OrderRepo {
   Future<Response> confirmOrderApi(Map<String, dynamic> body) async {
@@ -16,7 +15,8 @@ class OrderRepo {
         : isSuccess
             ? "Order Placed Successfully!!"
             : "Something Went Wrong!";
-    return Response(isSuccess, message, "");
+    return Response(
+        isSuccess, message, isSuccess ? responseJson["record"].toString() : "");
   }
 
   Future<Response> checkPayment(Map<String, dynamic> body) async {

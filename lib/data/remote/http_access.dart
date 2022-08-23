@@ -21,6 +21,9 @@ class Networking {
       body: body,
       headers: header,
     );
+    print(url);
+    print(body);
+    print(res.body);
     return res.body;
   }
 

@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 class ViewModel extends ChangeNotifier {
@@ -23,6 +24,8 @@ class ViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }).catchError((th) {
+      print("HFajpwihnfgptjawng $th");
+      print("$th");
       log(th.runtimeType.toString());
       log(th.toString());
       if (th is SocketException) {
