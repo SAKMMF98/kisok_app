@@ -32,9 +32,14 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
       viewModel.openWebView = (
           {required String url,
           required String txId,
-          required String orderId}) async {
-        Navigator.pushNamed(context, PaymentWeb.routeName,
-            arguments: {"initialUrl": url, "txId": txId, "orderId": orderId});
+          required String orderId,
+          required String userType}) async {
+        Navigator.pushNamed(context, PaymentWeb.routeName, arguments: {
+          "initialUrl": url,
+          "txId": txId,
+          "orderId": orderId,
+          "userType": userType
+        });
       };
       viewModel.userFoundOnECity =
           ({required CartData cartData, required String userId}) async {
@@ -48,15 +53,20 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
         orderSuccess = true;
         if (mounted) setState(() {});
         viewModel.emptyCart();
-        Navigator.pushNamed(context, InvoicePage.routeName, arguments: value);
+        Navigator.pushNamed(context, InvoicePage.routeName,
+            arguments: {"orderId": value, "userType": "1"});
         // viewModel.invoicePage(value);
       };
       viewModel.orderSuccess = (
           {required CartData cartData,
           required String txId,
-          required String orderId}) async {
+          required String orderId,
+          required String userType}) async {
         viewModel.paymentByCNetWallet(
-            cartData: cartData, txId: txId, orderId: orderId);
+            cartData: cartData,
+            txId: txId,
+            orderId: orderId,
+            userType: userType);
       };
     });
   }

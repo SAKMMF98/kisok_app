@@ -208,23 +208,36 @@ class Details extends StatelessWidget {
         ),
       );
     } else {
-      if (details.offers.toString() != "[]") {
-        bool discountShow = false;
-        try {
-          double price = double.parse(
-              details.price!.replaceAll(".", "").replaceAll(",", ""));
-          double discount = double.parse(
-              details.offerPrice!.replaceAll(".", "").replaceAll(",", ""));
-          discountShow = price == discount;
-        } catch (_) {
+      bool discountShow = false;
+      try {
+        double price = double.parse(
+            details.price!.replaceAll(".", "").replaceAll(",", ""));
+        double discount = double.parse(
+            details.offerPrice!.replaceAll(".", "").replaceAll(",", ""));
+        if (discount == 0.00) {
           discountShow = false;
+        } else {
+          discountShow = price != discount;
         }
+      } catch (_) {
+        discountShow = false;
+      }
+      if (details.offers.toString() != "[]") {
+        // try {
+        //   double price = double.parse(
+        //       details.price!.replaceAll(".", "").replaceAll(",", ""));
+        //   double discount = double.parse(
+        //       details.offerPrice!.replaceAll(".", "").replaceAll(",", ""));
+        //   discountShow = price == discount;
+        // } catch (_) {
+        //   discountShow = false;
+        // }
         return RichText(
           text: TextSpan(
               children: [
                 TextSpan(
                   text: discountShow
-                      ? "  ${details.currencyCode ?? ""} ${details.offerPrice}"
+                      ? "  ${details.currencyCode ?? ""} ${details.price}"
                       : "",
                   style: const TextStyle(
                       fontFamily: "Josefin_Sans",
@@ -240,7 +253,33 @@ class Details extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: AppColors.appColor,
               ),
-              text: "${details.currencyCode ?? ""} ${details.price}"),
+              text: "${details.currencyCode ?? ""} ${details.offerPrice}"),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        );
+      } else if (discountShow) {
+        return RichText(
+          text: TextSpan(
+              children: [
+                TextSpan(
+                  text: discountShow
+                      ? "  ${details.currencyCode ?? ""} ${details.price}"
+                      : "",
+                  style: const TextStyle(
+                      fontFamily: "Josefin_Sans",
+                      decoration: TextDecoration.lineThrough,
+                      fontSize: 12,
+                      color: Color(0xFF717171),
+                      fontWeight: FontWeight.w300),
+                )
+              ],
+              style: const TextStyle(
+                fontSize: 26,
+                fontFamily: "Josefin_Sans",
+                fontWeight: FontWeight.w600,
+                color: AppColors.appColor,
+              ),
+              text: "${details.currencyCode ?? ""} ${details.offerPrice}"),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         );

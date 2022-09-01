@@ -49,8 +49,11 @@ class HomeRepo {
     Map body = {"page_no": "", "search": "", "category": ""};
     final response = await Networking.instance
         .post(EndPoints.kTrendsStoreUrl, jsonEncode(body));
+    print("Trends Check");
+    print(response);
     final responseJson = jsonDecode(response);
     List<StoreData> data = [];
+
     if (responseJson["status"] == "200") {
       var checkData = responseJson["record"]["data"];
       data = checkData.map<StoreData>((e) => StoreData.fromJson(e)).toList();

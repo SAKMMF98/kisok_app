@@ -140,7 +140,7 @@ class Item {
   String? productOptionId;
   String? kioskId;
   String? cartStatus;
-  String? appliedOffer;
+  var appliedOffer;
   String? productQty;
   String? name;
   String? category;
@@ -199,6 +199,7 @@ class Item {
       this.applyedOffer});
 
   factory Item.fromJson(Map<String, dynamic> json) {
+    print("dfawmenkgptaewngt $json");
     var offers = [];
     var applyedOffer = [];
     if (json['offers'] != null) {
@@ -212,13 +213,13 @@ class Item {
       });
     }
     List<SelectedSize> size = [];
-    if (json['selected_size'] != null&&json["selected_size"]!=false) {
+    if (json['selected_size'] != null && json["selected_size"] != false) {
       json['selected_size'].forEach((v) {
         size.add(SelectedSize.fromJson(v));
       });
     }
     List<SelectedColor> color = [];
-    if (json['selected_color'] != null&&json["selected_color"]!=false) {
+    if (json['selected_color'] != null && json["selected_color"] != false) {
       json['selected_color'].forEach((v) {
         color.add(SelectedColor.fromJson(v));
       });
@@ -251,7 +252,8 @@ class Item {
         imgsThumb: json['imgs_thumb'].cast<String>(),
         selectedSize: size,
         selectedColor: color,
-        offferPriceWithoutFormat: json['offfer_price_without_format'],
+        offferPriceWithoutFormat:
+            json['offfer_price_without_format'].toString(),
         offferPrice: json['offfer_price'],
         offers: offers,
         applyedOffer: applyedOffer);

@@ -43,16 +43,44 @@ class CartItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "${item.currencyCode ?? ""} ${item.price ?? ""}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontFamily: "Josefin_Sans",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Colors.black),
-                        ),
+                        item.offferPrice != null &&
+                                item.offferPrice != "" &&
+                                item.offferPrice != "0"
+                            ? RichText(
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            "  ${item.currencyCode ?? ""} ${item.price}",
+                                        style: const TextStyle(
+                                            fontFamily: "Josefin_Sans",
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            color: Colors.black),
+                                      )
+                                    ],
+                                    style: const TextStyle(
+                                        fontFamily: "Josefin_Sans",
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        color: Colors.black),
+                                    text:
+                                        "${item.currencyCode ?? ""} ${item.offferPrice}"),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : Text(
+                                "${item.currencyCode ?? ""} ${item.price ?? ""}",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontFamily: "Josefin_Sans",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Colors.black),
+                              ),
                         Text(
                           storeName,
                           maxLines: 1,
@@ -182,6 +210,109 @@ class CartItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget priceShow(Item details) {
+    if (details.offers.toString() == 'null') {
+      return Text(
+        "${details.currencyCode ?? ""} ${details.price}",
+        style: const TextStyle(
+            fontFamily: "Josefin_Sans",
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            color: Colors.black),
+      );
+    } else {
+      bool discountShow = false;
+      try {
+        double price = double.parse(
+            details.price!.replaceAll(".", "").replaceAll(",", ""));
+        double discount = double.parse(
+            details.offferPrice!.replaceAll(".", "").replaceAll(",", ""));
+        if (discount == 0.00) {
+          discountShow = false;
+        } else {
+          if (double.parse(discount.toString()) ==
+              double.parse(price.toString())) {
+            discountShow = false;
+          } else {
+            discountShow = price != discount;
+          }
+        }
+      } catch (_) {
+        discountShow = false;
+      }
+      if (details.offers.toString() != "[]") {
+        // try {
+        //   double price = double.parse(
+        //       details.price!.replaceAll(".", "").replaceAll(",", ""));
+        //   double discount = double.parse(
+        //       details.offerPrice!.replaceAll(".", "").replaceAll(",", ""));
+        //   discountShow = price == discount;
+        // } catch (_) {
+        //   discountShow = false;
+        // }
+        return RichText(
+          text: TextSpan(
+              children: [
+                TextSpan(
+                  text: discountShow
+                      ? "  ${details.currencyCode ?? ""} ${details.offferPrice}"
+                      : "",
+                  style: const TextStyle(
+                      fontFamily: "Josefin_Sans",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.black),
+                )
+              ],
+              style: const TextStyle(
+                fontSize: 16,
+                fontFamily: "Josefin_Sans",
+                fontWeight: FontWeight.w600,
+                color: AppColors.appColor,
+              ),
+              text: "${details.currencyCode ?? ""} ${details.price}"),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        );
+      } else if (discountShow) {
+        return RichText(
+          text: TextSpan(
+              children: [
+                TextSpan(
+                  text: discountShow
+                      ? "  ${details.currencyCode ?? ""} ${details.price}"
+                      : "",
+                  style: const TextStyle(
+                      fontFamily: "Josefin_Sans",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.black),
+                )
+              ],
+              style: const TextStyle(
+                fontSize: 16,
+                fontFamily: "Josefin_Sans",
+                fontWeight: FontWeight.w600,
+                color: AppColors.appColor,
+              ),
+              text: "${details.currencyCode ?? ""} ${details.offferPrice}"),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        );
+      } else {
+        return Text(
+          "${details.currencyCode ?? ""} ${details.price}",
+          style: const TextStyle(
+            fontSize: 16,
+            fontFamily: "Josefin_Sans",
+            fontWeight: FontWeight.w600,
+            color: AppColors.appColor,
+          ),
+        );
+      }
+    }
   }
 
 // String getColorAndSizeText(Item item) {

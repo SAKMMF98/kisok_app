@@ -49,9 +49,11 @@ class _PaymentWebState extends State<PaymentWeb> {
     getViewModel<PaymentModeViewModel>(context, (viewModel) {
       onceDone = false;
       if (mounted) setState(() {});
-      viewModel.checkPaymentDone = (orderId) {
+      viewModel.checkPaymentDone =
+          ({required String orderId, required String userType}) {
         webViewController.clearCache();
-        Navigator.pushNamed(context, InvoicePage.routeName, arguments: orderId);
+        Navigator.pushNamed(context, InvoicePage.routeName,
+            arguments: {"orderId": orderId, "userType": userType});
       };
       viewModel.checkPaymentFailed = () {
         errorToast(msg: viewModel.snackBarText!);
@@ -135,7 +137,8 @@ class _PaymentWebState extends State<PaymentWeb> {
                     onceDone) {
                   context.read<PaymentModeViewModel>().checkPayment(
                       txId: paymentData["txId"]!,
-                      orderId: paymentData["orderId"]!);
+                      orderId: paymentData["orderId"]!,
+                      userType: paymentData["userType"]!);
                 } else if (url.toString().contains(
                     "https://secure.cinetpay.com/notifypay?csrf_token")) {
                   onceDone = true;

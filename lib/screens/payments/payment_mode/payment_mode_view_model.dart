@@ -17,7 +17,8 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   void Function(
       {required String url,
       required String txId,
-      required String orderId})? openWebView;
+      required String orderId,
+      required String userType})? openWebView;
   void Function({required CartData cartData, required String userId})?
       userFoundOnECity;
   ValueChanged<String>? pinMatchedSuccess;
@@ -25,8 +26,10 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   void Function(
       {required CartData cartData,
       required String txId,
-      required String orderId})? orderSuccess;
-  ValueChanged<String>? checkPaymentDone;
+      required String orderId,
+      required String userType})? orderSuccess;
+  Function({required String orderId, required String userType})?
+      checkPaymentDone;
   VoidCallback? checkPaymentFailed;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -78,26 +81,26 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   }
 
   void paymentByECityWallet(CartData cartData) {
-    String? isPassword = isValidPassword(passwordController.text);
-    if (isPassword != null) {
-      snackBarText = isPassword;
-      onError?.call();
-    } else {
-      callApi(() async {
-        Map<String, String> data = {
-          "email": emailController.text,
-          "password": passwordController.text,
-        };
-        Response response = await _paymentRepo.checkUserOnECity(data);
-        if (response.isSuccessFul) {
-          userFoundOnECity?.call(cartData: cartData, userId: response.data);
-          snackBarText = response.message;
-        } else {
-          snackBarText = response.message;
-          onError?.call();
-        }
-      });
-    }
+    // String? isPassword = isValidPassword(passwordController.text);
+    // if (isPassword != null) {
+    //   snackBarText = isPassword;
+    //   onError?.call();
+    // } else {
+    callApi(() async {
+      Map<String, String> data = {
+        "email": emailController.text,
+        // "password": passwordController.text.toString(),
+      };
+      Response response = await _paymentRepo.checkUserOnECity(data);
+      if (response.isSuccessFul) {
+        userFoundOnECity?.call(cartData: cartData, userId: response.data);
+        snackBarText = response.message;
+      } else {
+        snackBarText = response.message;
+        onError?.call();
+      }
+    });
+    // }
   }
 
   void pinMatch({required String userId, required String pin}) async {
@@ -124,7 +127,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
         "camp_id": "",
         "cart_total": cartData.cart?.totalDiscountedPrice ?? "",
         "txn_id": cpmId,
-        "id": userId
+        "email": emailController.text
       };
       Response response = await _paymentRepo.paymentWithWallet(data);
       if (response.isSuccessFul) {
@@ -140,26 +143,31 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   void paymentByCNetWallet(
       {required CartData cartData,
       required String txId,
-      required String orderId}) {
+      required String orderId,
+      required String userType}) {
     String url;
     try {
       url =
           "https://alphaxtech.net/ecity/index.php/web/Verify/createSignature?user_id=${SharedPrefHelper.userId}&merchant_id=${cartData.storeInfo?.merchantId}&payment_mode=phone&payment_for=2&reference_id=0&order_amount=${cartData.cart?.totalDiscountedPrice}&cpm_trans_id=$txId&store_id=${cartData.storeInfo?.id}";
-      openWebView?.call(url: url, txId: txId, orderId: orderId);
+      openWebView?.call(
+          url: url, txId: txId, orderId: orderId, userType: userType);
     } catch (_) {
       snackBarText = "Something Went Wrong";
       onError?.call();
     }
   }
 
-  void checkPayment({required String txId, required String orderId}) {
+  void checkPayment(
+      {required String txId,
+      required String orderId,
+      required String userType}) {
     callApi(() async {
       Map<String, String> body = {"cpm_trans_id": txId};
       Response response = await _orderRepo.checkPayment(body);
       emptyCart();
       if (response.isSuccessFul) {
         snackBarText = response.message;
-        checkPaymentDone?.call(orderId);
+        checkPaymentDone?.call(orderId: orderId, userType: userType);
       } else {
         snackBarText = response.message;
         checkPaymentFailed?.call();
@@ -183,7 +191,10 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
       if (response.isSuccessFul) {
         snackBarText = response.message;
         orderSuccess?.call(
-            cartData: cartData, txId: cpmId, orderId: response.data);
+            cartData: cartData,
+            txId: cpmId,
+            orderId: response.data["record"].toString(),
+            userType: response.data["type"].toString());
       } else {
         snackBarText = response.message;
         onError?.call();

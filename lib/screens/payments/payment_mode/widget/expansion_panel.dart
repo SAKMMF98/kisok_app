@@ -61,36 +61,36 @@ class CustomExpansion extends ExpansionPanel with CommonValidations {
                         inlineBorderColor: const Color(0xFF717171),
                         validator: (val) {},
                       ),
-                      if (image != "assets/images/coin.png")
-                        Selector<PaymentModeViewModel, bool>(
-                            selector: (select, provider) => provider.visible,
-                            builder: (context, visible, child) {
-                              return TextCommonField(
-                                hintText: "Password",
-                                controller: context
-                                    .read<PaymentModeViewModel>()
-                                    .passwordController,
-                                validator: (val) {},
-                                obscureText: visible,
-                                readOnly: context
-                                    .read<PaymentModeViewModel>()
-                                    .isLoading,
-                                suffix: GestureDetector(
-                                  onTap: () {
-                                    context
-                                        .read<PaymentModeViewModel>()
-                                        .visibleSet = !visible;
-                                  },
-                                  child: Icon(
-                                    visible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: const Color(0xFF717171),
-                                  ),
-                                ),
-                                inlineBorderColor: const Color(0xFF717171),
-                              );
-                            }),
+                      // if (image != "assets/images/coin.png")
+                      //   Selector<PaymentModeViewModel, bool>(
+                      //       selector: (select, provider) => provider.visible,
+                      //       builder: (context, visible, child) {
+                      //         return TextCommonField(
+                      //           hintText: "Password",
+                      //           controller: context
+                      //               .read<PaymentModeViewModel>()
+                      //               .passwordController,
+                      //           validator: (val) {},
+                      //           obscureText: visible,
+                      //           readOnly: context
+                      //               .read<PaymentModeViewModel>()
+                      //               .isLoading,
+                      //           suffix: GestureDetector(
+                      //             onTap: () {
+                      //               context
+                      //                   .read<PaymentModeViewModel>()
+                      //                   .visibleSet = !visible;
+                      //             },
+                      //             child: Icon(
+                      //               visible
+                      //                   ? Icons.visibility
+                      //                   : Icons.visibility_off,
+                      //               color: const Color(0xFF717171),
+                      //             ),
+                      //           ),
+                      //           inlineBorderColor: const Color(0xFF717171),
+                      //         );
+                      //       }),
                       if (image == "assets/images/coin.png") ...[
                         TextCommonField(
                           inlineBorderColor: const Color(0xFF717171),

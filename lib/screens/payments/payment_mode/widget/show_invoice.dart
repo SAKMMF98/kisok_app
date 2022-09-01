@@ -13,7 +13,9 @@ class InvoicePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String orderId = ModalRoute.of(context)?.settings.arguments as String;
+    Map data = ModalRoute.of(context)?.settings.arguments as Map;
+    String orderId = data["orderId"];
+    String userType = data["userType"];
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamedAndRemoveUntil(
@@ -61,7 +63,7 @@ class InvoicePage extends StatelessWidget {
         body: InAppWebView(
           initialUrlRequest: URLRequest(
             url: Uri.parse(
-                "https://alphaxtech.net/ecity/index.php/api/users/kiosk/invoicedetails/$orderId"),
+                "https://alphaxtech.net/ecity/index.php/api/users/kiosk/invoicedetails/$orderId/$userType"),
             headers: {
               'authtoken': SharedPrefHelper.authToken,
             },

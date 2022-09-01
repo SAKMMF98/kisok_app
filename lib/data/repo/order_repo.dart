@@ -16,7 +16,14 @@ class OrderRepo {
             ? "Order Placed Successfully!!"
             : "Something Went Wrong!";
     return Response(
-        isSuccess, message, isSuccess ? responseJson["record"].toString() : "");
+        isSuccess,
+        message,
+        isSuccess
+            ? {
+                "record": responseJson["record"].toString(),
+                "type": responseJson["type"].toString()
+              }
+            : "");
   }
 
   Future<Response> checkPayment(Map<String, dynamic> body) async {
