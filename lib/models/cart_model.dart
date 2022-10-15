@@ -156,6 +156,7 @@ class Item {
   String? currencyCode;
   String? cashtoken;
   String? rating;
+  bool inStock;
   String? productStatus;
   List<String>? imgsThumb;
   List<SelectedSize>? selectedSize;
@@ -167,6 +168,7 @@ class Item {
 
   Item(
       {required this.isLoading,
+      required this.inStock,
       this.qty,
       this.cartId,
       this.productId,
@@ -224,6 +226,7 @@ class Item {
         color.add(SelectedColor.fromJson(v));
       });
     }
+    print("aobfroew $json");
     return Item(
         isLoading: false,
         qty: json['qty'],
@@ -243,6 +246,7 @@ class Item {
         merchantId: json['merchant_id'],
         storeId: json['store_id'],
         description: json['description'],
+        inStock: json["inStock"],
         imgs: json['imgs'].cast<String>(),
         currency: json['currency'],
         currencyCode: json['currency_code'],

@@ -16,7 +16,7 @@ class CartViewModel extends ViewModel {
   List<Item> get cartItems => _cartItems;
 
   bool get cartUpdating => _cartUpdating;
-
+  VoidCallback? onEmpty;
   VoidCallback? onSuccess;
   VoidCallback? checkoutCall;
 
@@ -39,7 +39,24 @@ class CartViewModel extends ViewModel {
 
   set setCartItems(List<Item> data) {
     _cartItems = data;
+    checkInStock(data);
     notifyListeners();
+  }
+
+  void checkInStock(List<Item> items) {
+    List<Item> allData = [];
+    try {
+      allData = items;
+      for (int i = 0; i < items.length; i++) {
+        if (!items[i].inStock) {
+          removeProduct(items[i], false);
+          allData.remove(items[i]);
+          if (allData.isEmpty) {
+            onEmpty?.call();
+          }
+        }
+      }
+    } catch (_) {}
   }
 
   void getCartDetails() {
@@ -57,7 +74,7 @@ class CartViewModel extends ViewModel {
       cartUpdating = true;
       notifyListeners();
       if (!increase && (int.parse(item.qty!) - 1) == 0) {
-        removeProduct(item);
+        removeProduct(item, true);
       } else {
         item.isLoading = true;
         notifyListeners();
@@ -83,7 +100,7 @@ class CartViewModel extends ViewModel {
     });
   }
 
-  void removeProduct(Item item) async {
+  void removeProduct(Item item, bool showToast) async {
     if (item.isLoading) return;
     callApi(() async {
       isLoading = false;
@@ -94,11 +111,15 @@ class CartViewModel extends ViewModel {
       cartUpdating = false;
       if (response.isSuccessFul) {
         getCartDetails();
-        snackBarText = response.message;
-        onSuccess?.call();
+        if (showToast) {
+          snackBarText = response.message;
+          onSuccess?.call();
+        }
       } else {
-        snackBarText = response.message;
-        onError?.call();
+        if (showToast) {
+          snackBarText = response.message;
+          onError?.call();
+        }
       }
       item.isLoading = false;
       notifyListeners();

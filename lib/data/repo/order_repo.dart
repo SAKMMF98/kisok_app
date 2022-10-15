@@ -26,6 +26,27 @@ class OrderRepo {
             : "");
   }
 
+  Future<Response> cashOrderApi(Map<String, dynamic> body) async {
+    final response = await Networking.instance
+        .post(EndPoints.kCashOrderApi, jsonEncode(body));
+    final responseJson = jsonDecode(response);
+    bool isSuccess = responseJson["status"] == "200";
+    String message = responseJson.containsKey("message")
+        ? responseJson["message"]
+        : isSuccess
+            ? "Order Placed Successfully!!"
+            : "Something Went Wrong!";
+    return Response(
+        isSuccess,
+        message,
+        isSuccess
+            ? {
+                "record": responseJson["record"].toString(),
+                "type": responseJson["type"].toString()
+              }
+            : "");
+  }
+
   Future<Response> checkPayment(Map<String, dynamic> body) async {
     final response = await Networking.instance
         .post(EndPoints.kCheckPaymentUrl, jsonEncode(body));

@@ -177,7 +177,7 @@ class CartItem extends StatelessWidget {
                                     onTap: () {
                                       context
                                           .read<CartViewModel>()
-                                          .removeProduct(item);
+                                          .removeProduct(item, true);
                                     },
                                     child: const Icon(
                                       Icons.cancel,

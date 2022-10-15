@@ -16,6 +16,7 @@ class EndPoints {
   static const kEmptyCartUrl = _kBaseUrl + "emptyCard";
   static const kGetCartUrl = _kBaseUrl + "mycart";
   static const kOrderUrl = _kBaseUrlWithKiosk + "confirm";
+  static const kCashOrderApi = _kBaseUrlWithKiosk + "/savePos";
   static const kWalletOrderUrl = _kBaseUrlWithKiosk + "confirmWithWallet";
   static const kCheckPaymentUrl = _kBaseUrl + "checkPayment";
   static const kCheckUser = _kBaseUrl + "checkuserid";

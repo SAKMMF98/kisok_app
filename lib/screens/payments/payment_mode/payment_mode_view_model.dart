@@ -23,6 +23,8 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
       userFoundOnECity;
   ValueChanged<String>? pinMatchedSuccess;
   ValueChanged<String>? confirmWithWalletSuccess;
+  void Function({required String orderId, required String userType})?
+      confirmWithCash;
   void Function(
       {required CartData cartData,
       required String txId,
@@ -34,6 +36,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   TextEditingController pinController = TextEditingController();
   int? _selectedExpansion;
 
@@ -74,7 +77,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
           paymentByQrCode();
           break;
         case 3:
-          paymentByCash();
+          paymentByCash(cartData: cartData);
           break;
       }
     }
@@ -204,7 +207,40 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
 
   void paymentByQrCode() {}
 
-  void paymentByCash() {}
+  void paymentByCash({required CartData cartData}) {
+    String? isName = isValidName(nameController.text, "Name");
+    String? isAddress = isNotEmpty(addressController.text, "Address");
+    String cpmId = "ORDER_${DateTime.now().millisecondsSinceEpoch}";
+    String totalAmount = cartData.cart!.totalDiscountedPrice.toString();
+    if (isName != null) {
+      snackBarText = isName;
+      onError?.call();
+    } else if (isAddress != null) {
+      snackBarText = isAddress;
+      onError?.call();
+    } else {
+      callApi(() async {
+        Map<String, String> body = {
+          "name": nameController.text,
+          "address": addressController.text,
+          "email": emailController.text,
+          "tx_id": cpmId,
+          "cart_total": totalAmount,
+          "payment_mode": "1"
+        };
+        Response response = await _orderRepo.cashOrderApi(body);
+        if (response.isSuccessFul) {
+          snackBarText = response.message;
+          confirmWithCash?.call(
+              orderId: response.data["record"].toString(),
+              userType: response.data["type"].toString());
+        } else {
+          snackBarText = response.message;
+          onError?.call();
+        }
+      });
+    }
+  }
 
   void emptyCart() async {
     callApi(() async {
@@ -215,6 +251,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   @override
   void dispose() {
     emailController.dispose();
+    addressController.dispose();
     passwordController.dispose();
     super.dispose();
   }

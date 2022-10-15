@@ -57,6 +57,14 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
             arguments: {"orderId": value, "userType": "1"});
         // viewModel.invoicePage(value);
       };
+      viewModel.confirmWithCash =
+          ({required String orderId, required String userType}) {
+        orderSuccess = true;
+        if (mounted) setState(() {});
+        viewModel.emptyCart();
+        Navigator.pushNamed(context, InvoicePage.routeName,
+            arguments: {"orderId": orderId, "userType": userType});
+      };
       viewModel.orderSuccess = (
           {required CartData cartData,
           required String txId,

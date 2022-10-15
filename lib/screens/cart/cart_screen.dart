@@ -6,6 +6,7 @@ import 'package:ecitykiosk/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
 import '../../utils/common_widgets.dart';
 import 'widgets/bottomSheet.dart';
 import 'widgets/cart_item.dart';
@@ -29,6 +30,10 @@ class _CartScreenState extends State<CartScreen> {
       viewModel.getCartDetails();
       viewModel.onSuccess = () {
         showToast(msg: viewModel.snackBarText!);
+      };
+      viewModel.onEmpty = () {
+        Navigator.pop(context);
+        showToast(msg: "Cart is empty, or product out of stock");
       };
       viewModel.checkoutCall = () {
         if (viewModel.cartData != null) {

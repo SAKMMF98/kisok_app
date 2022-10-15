@@ -104,6 +104,11 @@ class CustomExpansion extends ExpansionPanel with CommonValidations {
                         ),
                         TextCommonField(
                           hintText: "Address",
+                          readOnly:
+                              context.read<PaymentModeViewModel>().isLoading,
+                          controller: context
+                              .read<PaymentModeViewModel>()
+                              .addressController,
                           inlineBorderColor: const Color(0xFF717171),
                           validator: (val) {},
                         ),
