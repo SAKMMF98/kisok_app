@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ecitykiosk/data/local/shared_pref_helper.dart';
 import 'package:ecitykiosk/data/repo/cart_repo.dart';
 import 'package:ecitykiosk/myRoutes.dart';
 import 'package:ecitykiosk/screens/home/home_screen.dart';
@@ -32,8 +33,8 @@ class _MyAppState extends State<MyApp> {
   void startTimer() {
     _timer?.cancel();
     _timer = Timer(const Duration(minutes: 5), () async {
-      if (_navigatorKey.currentContext != null) {
-        print("Called Function");
+      if (_navigatorKey.currentContext != null &&
+          SharedPrefHelper.stayLoggedIn) {
         await CartRepo().emptyCart();
         Navigator.pushNamedAndRemoveUntil(_navigatorKey.currentContext!,
             HomeScreen.routeName, (route) => false);
