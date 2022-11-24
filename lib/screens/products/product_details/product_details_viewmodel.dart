@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:ecitykiosk/data/remote/response.dart';
 import 'package:ecitykiosk/data/repo/cart_repo.dart';
@@ -12,6 +12,8 @@ class ProductDetailsViewModel extends ViewModel {
   final _productRepo = ProductsRepo();
   final _cartRepo = CartRepo();
   int _index = 0;
+  VoidCallback? noActivityCall;
+  Timer? _timer;
   int _quantityIndex = 01;
   List<ProductColors>? _productColors;
   ProductSizes? _selectedSize;

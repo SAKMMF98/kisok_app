@@ -4,24 +4,34 @@ import 'package:ecitykiosk/utils/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BackdropImage extends StatelessWidget {
+class BackdropImage extends StatefulWidget {
   final List<String> productsImages;
-  const BackdropImage({Key? key,required this.productsImages}) : super(key: key);
+
+  const BackdropImage({Key? key, required this.productsImages})
+      : super(key: key);
 
   @override
+  State<BackdropImage> createState() => _BackdropImageState();
+}
+
+class _BackdropImageState extends State<BackdropImage> {
+  @override
   Widget build(BuildContext context) {
+    final provider = context.read<ProductDetailsViewModel>();
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Stack(
         children: [
           CarouselSlider(
-            items: productsImages
-                .map((e) => Image.network(
-                      e,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    ))
+            items: widget.productsImages
+                .map(
+                  (e) => Image.network(
+                    e,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ),
+                )
                 .toList(),
             options: CarouselOptions(
                 aspectRatio: 1,
@@ -43,7 +53,7 @@ class BackdropImage extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: productsImages.asMap().entries.map((entry) {
+                children: widget.productsImages.asMap().entries.map((entry) {
                   return Container(
                     width: 10.0,
                     height: 10.0,
@@ -51,17 +61,16 @@ class BackdropImage extends StatelessWidget {
                         vertical: 8.0, horizontal: 4.0),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(
-                            context.watch<ProductDetailsViewModel>().index ==
+                        color: Colors.white.withOpacity(context
+                                    .watch<ProductDetailsViewModel>()
+                                    .index ==
+                                entry.key
+                            ? 1.0
+                            : context.read<ProductDetailsViewModel>().index +
+                                        1 ==
                                     entry.key
-                                ? 1.0
-                                : context
-                                                .read<ProductDetailsViewModel>()
-                                                .index +
-                                            1 ==
-                                        entry.key
-                                    ? 0.5
-                                    : 0.2)),
+                                ? 0.5
+                                : 0.2)),
                   );
                 }).toList(),
               ),

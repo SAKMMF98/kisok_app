@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:ecitykiosk/models/product_model.dart';
 import 'package:ecitykiosk/models/store_model.dart';
 import 'package:ecitykiosk/screens/common/common_appBar.dart';
@@ -20,20 +18,29 @@ class StoresDetails extends StatefulWidget {
 }
 
 class _StoresDetailsState extends State<StoresDetails> {
+  StoreData? _storeData;
+
+  @override
+  void initState() {
+    super.initState();
+    getViewModel<StoreDetailsViewModel>(context, (viewModel) {
+      Map map = ModalRoute.of(context)?.settings.arguments as Map;
+      _storeData = map["storeData"];
+      if (mounted) setState(() {});
+      if (_storeData != null) {
+        viewModel.getProductList(_storeData!.id!, 1);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map map = ModalRoute.of(context)?.settings.arguments as Map;
-    StoreData _storeData = map["storeData"];
     String address =
-        "${_storeData.storeAddress ?? ""} ${_storeData.storeCity ?? ""} ${_storeData.storeCountry ?? ""}";
-    getViewModel<StoreDetailsViewModel>(context,
-        (StoreDetailsViewModel viewModel) {
-      viewModel.getProductList(_storeData.id!, 1);
-    });
+        "${_storeData?.storeAddress ?? ""} ${_storeData?.storeCity ?? ""} ${_storeData?.storeCountry ?? ""}";
     return Scaffold(
       appBar: commonAppBar(
           title: Text(
-            _storeData.storeName ?? "Store Name",
+            _storeData?.storeName ?? "Store Name",
             style: const TextStyle(
                 fontFamily: "Josefin_Sans",
                 fontSize: 22,
@@ -61,16 +68,17 @@ class _StoresDetailsState extends State<StoresDetails> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            _storeData.storeLogo ?? "",
-                            fit: BoxFit.cover,
-                            width: MediaQuery.of(context).size.width,
+                      if (_storeData?.storeLogo != null)
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.network(
+                              _storeData!.storeLogo!,
+                              fit: BoxFit.cover,
+                              width: MediaQuery.of(context).size.width,
+                            ),
                           ),
                         ),
-                      ),
                       Padding(
                         padding:
                             const EdgeInsets.only(left: 10, right: 8, top: 8),
@@ -125,7 +133,6 @@ class _StoresDetailsState extends State<StoresDetails> {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    // childAspectRatio: 3 / 2,
                                     childAspectRatio: 3 / 3.5,
                                     crossAxisSpacing: 5,
                                     mainAxisSpacing: 5),

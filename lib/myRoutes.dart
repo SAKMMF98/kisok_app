@@ -51,12 +51,8 @@ class RouteHelper {
           ),
       PaymentModeScreen.routeName: (_) => MultiProvider(
             providers: [
-              ChangeNotifierProvider.value(
-                value: _cartViewModel,
-              ),
-              ChangeNotifierProvider.value(
-                value: _paymentViewModel,
-              ),
+              ChangeNotifierProvider.value(value: _cartViewModel),
+              ChangeNotifierProvider.value(value: _paymentViewModel),
             ],
             child: const PaymentModeScreen(),
           ),

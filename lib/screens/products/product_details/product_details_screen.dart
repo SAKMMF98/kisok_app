@@ -2,6 +2,7 @@ import 'package:ecitykiosk/models/product_model.dart';
 import 'package:ecitykiosk/screens/cart/cart_screen.dart';
 import 'package:ecitykiosk/utils/common_widgets.dart';
 import 'package:flutter/material.dart';
+
 import 'backdrop_image.dart';
 import 'details_card.dart';
 import 'product_details_viewmodel.dart';
@@ -15,10 +16,19 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  ProductData? _productData;
+
   @override
   initState() {
     getViewModel<ProductDetailsViewModel>(context,
         (ProductDetailsViewModel viewModel) {
+      Map map = ModalRoute.of(context)?.settings.arguments as Map;
+      _productData = map["productData"];
+      if (mounted) setState(() {});
+      viewModel.setDetails = null;
+      if (_productData != null) {
+        viewModel.getProductDetails(_productData!.id.toString());
+      }
       viewModel.onCartSuccess = () {
         showToast(msg: viewModel.snackBarText!);
         Navigator.pushNamed(context, CartScreen.routeName);
@@ -29,18 +39,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map map = ModalRoute.of(context)?.settings.arguments as Map;
-    ProductData _productData = map["productData"];
-    getViewModel<ProductDetailsViewModel>(context,
-        (ProductDetailsViewModel viewModel) {
-      viewModel.setDetails = null;
-      viewModel.getProductDetails(_productData.id.toString());
-    });
     return SafeArea(
       child: Scaffold(
         bottomSheet: const Details(),
         body: BackdropImage(
-          productsImages: _productData.images,
+          productsImages: _productData?.images ?? [],
         ),
       ),
     );

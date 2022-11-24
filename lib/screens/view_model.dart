@@ -24,8 +24,7 @@ class ViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }).catchError((th) {
-      print("HFajpwihnfgptjawng $th");
-      print("$th");
+      isLoading = false;
       log(th.runtimeType.toString());
       log(th.toString());
       if (th is SocketException) {
@@ -36,7 +35,7 @@ class ViewModel extends ChangeNotifier {
         snackBarText = "Something went wrong, Please try again later";
       }
       onError?.call();
-      isLoading = false;
+
       notifyListeners();
     });
   }

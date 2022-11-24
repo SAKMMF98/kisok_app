@@ -181,6 +181,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   void confirmOrder({required CartData cartData}) {
     String cpmId = "ORDER_${DateTime.now().millisecondsSinceEpoch}";
     String totalAmount = cartData.cart!.totalDiscountedPrice.toString();
+    print("DAKspfgjewgf");
     callApi(() async {
       Map<String, String> body = {
         "email": emailController.text,
@@ -190,7 +191,9 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
         "tx_id": cpmId,
         "cart_total": totalAmount
       };
+      print("Dalqwsfo[ $body");
       Response response = await _orderRepo.confirmOrderApi(body);
+      print("Dakosnpfijtew $response");
       if (response.isSuccessFul) {
         snackBarText = response.message;
         orderSuccess?.call(
