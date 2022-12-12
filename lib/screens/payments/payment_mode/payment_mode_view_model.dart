@@ -55,6 +55,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
     _selectedExpansion = value;
     emailController.clear();
     passwordController.clear();
+    addressController.clear();
     nameController.clear();
     notifyListeners();
   }
@@ -181,7 +182,6 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   void confirmOrder({required CartData cartData}) {
     String cpmId = "ORDER_${DateTime.now().millisecondsSinceEpoch}";
     String totalAmount = cartData.cart!.totalDiscountedPrice.toString();
-    print("DAKspfgjewgf");
     callApi(() async {
       Map<String, String> body = {
         "email": emailController.text,
@@ -229,7 +229,8 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
           "email": emailController.text,
           "tx_id": cpmId,
           "cart_total": totalAmount,
-          "payment_mode": "1"
+          "payment_mode": "1",
+          "group_id": ""
         };
         Response response = await _orderRepo.cashOrderApi(body);
         if (response.isSuccessFul) {
