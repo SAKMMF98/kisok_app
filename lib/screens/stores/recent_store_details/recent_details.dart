@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/product_model.dart';
 import 'package:ecitykiosk/models/store_model.dart';
 import 'package:ecitykiosk/screens/common/common_appBar.dart';
@@ -40,7 +41,7 @@ class _StoresDetailsState extends State<StoresDetails> {
     return Scaffold(
       appBar: commonAppBar(
           title: Text(
-            _storeData?.storeName ?? "Store Name",
+            _storeData?.storeName ?? "store_name".tr(),
             style: const TextStyle(
                 fontFamily: "Josefin_Sans",
                 fontSize: 22,
@@ -94,7 +95,7 @@ class _StoresDetailsState extends State<StoresDetails> {
                               child: Text(
                                 address.trim().isNotEmpty
                                     ? address
-                                    : "Store Address",
+                                    : "store_address".tr(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -110,11 +111,11 @@ class _StoresDetailsState extends State<StoresDetails> {
                       )
                     ],
                   )),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Text(
-                  "Products",
-                  style: TextStyle(
+                  "products".tr(),
+                  style: const TextStyle(
                       color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -231,10 +232,10 @@ class _StoresDetailsState extends State<StoresDetails> {
                                 .products
                                 .isNotEmpty
                             ? const SizedBox.shrink()
-                            : const Center(
+                            : Center(
                                 child: Text(
-                                  "No Products Found",
-                                  style: TextStyle(
+                                  "no_products_found".tr(),
+                                  style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700,
                                       fontFamily: "Josefin_Sans"),

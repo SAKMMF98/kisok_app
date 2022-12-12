@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/data/local/shared_pref_helper.dart';
 import 'package:ecitykiosk/data/remote/response.dart';
 import 'package:ecitykiosk/data/repo/cart_repo.dart';
@@ -156,7 +157,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
       openWebView?.call(
           url: url, txId: txId, orderId: orderId, userType: userType);
     } catch (_) {
-      snackBarText = "Something Went Wrong";
+      snackBarText = "something_went_wrong".tr();
       onError?.call();
     }
   }
@@ -191,9 +192,7 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
         "tx_id": cpmId,
         "cart_total": totalAmount
       };
-      print("Dalqwsfo[ $body");
       Response response = await _orderRepo.confirmOrderApi(body);
-      print("Dakosnpfijtew $response");
       if (response.isSuccessFul) {
         snackBarText = response.message;
         orderSuccess?.call(
@@ -211,8 +210,8 @@ class PaymentModeViewModel extends ViewModel with CommonValidations {
   void paymentByQrCode() {}
 
   void paymentByCash({required CartData cartData}) {
-    String? isName = isValidName(nameController.text, "Name");
-    String? isAddress = isNotEmpty(addressController.text, "Address");
+    String? isName = isValidName(nameController.text, "name".tr());
+    String? isAddress = isNotEmpty(addressController.text, "address".tr());
     String cpmId = "ORDER_${DateTime.now().millisecondsSinceEpoch}";
     String totalAmount = cartData.cart!.totalDiscountedPrice.toString();
     if (isName != null) {

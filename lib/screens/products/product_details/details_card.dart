@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/product_details_model.dart';
 import 'package:ecitykiosk/screens/products/product_details/product_details_viewmodel.dart';
 import 'package:ecitykiosk/utils/app_colors.dart';
@@ -49,9 +50,9 @@ class Details extends StatelessWidget {
                             const SizedBox(height: 20),
                             priceShow(provider.productDetails!),
                             const SizedBox(height: 20),
-                            const Text(
-                              "Store Name",
-                              style: TextStyle(
+                            Text(
+                              "store_name".tr(),
+                              style: const TextStyle(
                                   fontFamily: "Josefin_Sans",
                                   color: Color(0xFF717171),
                                   fontSize: 16,
@@ -85,10 +86,10 @@ class Details extends StatelessWidget {
                           ],
                         ),
                       )
-                    : const Center(
+                    : Center(
                         child: Text(
-                          "No Details Found",
-                          style: TextStyle(
+                          "np_details_found".tr(),
+                          style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                               fontFamily: "Josefin_Sans"),

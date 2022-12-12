@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/banner_model.dart';
 import 'package:flutter/material.dart';
 
@@ -33,10 +32,10 @@ class _BannerShowState extends State<BannerShow> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                               border: Border.all(color: Colors.black)),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              "Banner Not Found",
-                              style: TextStyle(
+                              "banner_image_not_found".tr(),
+                              style: const TextStyle(
                                   fontFamily: "Josefin Sans Regular",
                                   fontWeight: FontWeight.w300,
                                   fontSize: 18,

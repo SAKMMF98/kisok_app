@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:ecitykiosk/data/local/shared_pref_helper.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/data/remote/http_access.dart';
 import 'package:ecitykiosk/data/remote/response.dart';
-import 'package:http/http.dart' as http;
 
 import '../remote/end_points.dart';
 
@@ -16,8 +15,8 @@ class PaymentRepo {
     String message = responseJson.containsKey("message")
         ? responseJson["message"]
         : isSuccess
-            ? "Payment Successfully!!"
-            : "Something Went Wrong!";
+            ? "payment_success".tr()
+            : "something_went_wrong".tr();
     return Response(
         isSuccess, message, isSuccess ? responseJson["record"] : " ");
   }
@@ -30,7 +29,7 @@ class PaymentRepo {
     String message = responseJson.containsKey("message")
         ? responseJson["message"]
         : isSuccess
-            ? "User Found Successfully!!"
+            ? "user_found_successfully".tr()
             : responseJson["record"].first.toString();
     String userId = isSuccess ? responseJson["record"]["id"] : "";
     return Response(isSuccess, message, userId);
@@ -44,24 +43,10 @@ class PaymentRepo {
     String message = responseJson.containsKey("message")
         ? responseJson["message"]
         : isSuccess
-            ? "Pin Matched Successfully!!"
-            : "Something Went Wrong!";
+            ? "pin_matched_successfully".tr()
+            : "something_went_wrong".tr();
     String userId =
         responseJson.containsKey("record") ? responseJson["record"]["id"] : "";
     return Response(isSuccess, message, userId);
-  }
-
-  Future<Response> invoiceCall(Map<String, dynamic> body) async {
-    final http.Response res = await http.post(
-      Uri.parse(EndPoints.kInvoicePageUrl),
-      body: jsonEncode(body),
-      headers: {
-        'authtoken': SharedPrefHelper.authToken,
-        'Content-Type': 'application/json'
-      },
-    );
-    bool isSuccess = res.statusCode == 200;
-    String message = isSuccess ? "Your Order Successfully" : "Invoice Error";
-    return Response(isSuccess, message, res.body);
   }
 }

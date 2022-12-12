@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/cart_model.dart';
 import 'package:ecitykiosk/screens/common/common_appBar.dart';
 import 'package:ecitykiosk/screens/home/home_screen.dart';
@@ -94,9 +95,9 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
           Scaffold(
             backgroundColor: Colors.white,
             appBar: commonAppBar(
-                title: const Text(
-                  "Select Payment Mode",
-                  style: TextStyle(
+                title: Text(
+                  "select_payment_mode".tr(),
+                  style: const TextStyle(
                       fontFamily: "Josefin_Sans",
                       fontWeight: FontWeight.w700,
                       fontSize: 22,
@@ -136,7 +137,7 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
                           },
                           children: [
                             CustomExpansion(
-                                text: "Ecity Wallet or AFS",
+                                text: "ecity_wallet_or_afs".tr(),
                                 isExpand: index == 0,
                                 context: context,
                                 index: 0,
@@ -145,19 +146,19 @@ class _PaymentModeScreenState extends State<PaymentModeScreen> {
                                 context: context,
                                 isExpand: index == 1,
                                 index: 1,
-                                text: "Mobile Wallet or Card",
+                                text: "mobile_wallet_or_card".tr(),
                                 image: 'assets/images/mobileWallet.png'),
                             CustomExpansion(
                                 context: context,
                                 isExpand: index == 2,
                                 index: 2,
-                                text: "NFC or QR Code",
+                                text: "nfc_or_qr_code".tr(),
                                 image: 'assets/images/scan.png'),
                             CustomExpansion(
                                 context: context,
                                 index: 3,
                                 isExpand: index == 3,
-                                text: "Pay Cash at pick-up",
+                                text: "pay_cash_at_pick_up".tr(),
                                 image: 'assets/images/coin.png'),
                           ]),
                     ],

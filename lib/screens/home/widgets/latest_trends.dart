@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/store_model.dart';
-import 'package:ecitykiosk/screens/products/product_details/product_details_screen.dart';
 import 'package:ecitykiosk/screens/stores/recent_store_details/recent_details.dart';
 import 'package:ecitykiosk/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,7 @@ class LatestTrendsCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            recent[position].storeName ?? "Stores",
+                            recent[position].storeName ?? "store_name".tr(),
                             style: const TextStyle(
                               fontFamily: "Josefin Sans Semi-Bold",
                               fontWeight: FontWeight.w600,
@@ -56,7 +56,8 @@ class LatestTrendsCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            recent[position].storeDescription ?? "Description",
+                            recent[position].storeDescription ??
+                                "description".tr(),
                             style: const TextStyle(
                               fontFamily: "Josefin Sans Regular",
                               fontWeight: FontWeight.w400,
@@ -68,9 +69,9 @@ class LatestTrendsCard extends StatelessWidget {
                             onTap: () => Navigator.pushNamed(
                                 context, StoresDetails.routeName,
                                 arguments: {"storeData": recent[position]}),
-                            child: const Text(
-                              "View Details",
-                              style: TextStyle(
+                            child: Text(
+                              "view_details".tr(),
+                              style: const TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontFamily: "Josefin Sans Bold",
                                 fontWeight: FontWeight.w700,

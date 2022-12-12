@@ -17,7 +17,6 @@ class BackdropImage extends StatefulWidget {
 class _BackdropImageState extends State<BackdropImage> {
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<ProductDetailsViewModel>();
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Stack(

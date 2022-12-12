@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 
 class ViewModel extends ChangeNotifier {
@@ -28,11 +29,11 @@ class ViewModel extends ChangeNotifier {
       log(th.runtimeType.toString());
       log(th.toString());
       if (th is SocketException) {
-        snackBarText = "Check Your Internet Connection.";
+        snackBarText = "check_your_internet_connection".tr();
       } else if (th is FormatException) {
-        snackBarText = "Format Exception Caught.";
+        snackBarText = "format_exception_found".tr();
       } else {
-        snackBarText = "Something went wrong, Please try again later";
+        snackBarText = "something_went_wrong".tr();
       }
       onError?.call();
 

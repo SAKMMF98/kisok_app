@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/store_model.dart';
 import 'package:ecitykiosk/screens/common/common_appBar.dart';
 import 'package:ecitykiosk/screens/home/home_viewmodel.dart';
@@ -72,7 +73,7 @@ class RecentScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
                       child: Text(
-                        storeData.storeName ?? "Store Name",
+                        storeData.storeName ?? "store_name".tr(),
                         style: const TextStyle(
                           fontFamily: "Josefin_Sans",
                           fontWeight: FontWeight.w400,
@@ -84,18 +85,18 @@ class RecentScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Row(
-                        children: const [
-                          Icon(
+                        children: [
+                          const Icon(
                             Icons.location_on,
                             size: 15,
                             color: Color(0xFF717171),
                           ),
                           Expanded(
                             child: Text(
-                              "Pizza hut, Connought circle",
+                              storeData.storeAddress ?? "",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: "Josefin_Sans",
                                 fontWeight: FontWeight.w300,
                                 fontSize: 12,

@@ -5,6 +5,7 @@ class SharedPrefHelper {
   static const String _authTokenPrefKey = 'auth_token_pref_key';
   static const String _onBoardingPrefKey = 'onBoardingSeen';
   static const String _stayLoggedInPrefKey = 'stay_logged_in_key';
+  static const String _languageSelection = 'language_selection';
   static const String _emailPrefKey = 'email_key';
 
   SharedPrefHelper._();
@@ -58,6 +59,15 @@ class SharedPrefHelper {
 
   static set stayLoggedIn(bool value) {
     _prefs.setBool(_stayLoggedInPrefKey, value);
+  }
+
+  ///language selection
+  static bool get languageSelected {
+    return _prefs.getBool(_languageSelection) ?? false;
+  }
+
+  static set languageSelected(bool value) {
+    _prefs.setBool(_languageSelection, value);
   }
 
   ///auth token

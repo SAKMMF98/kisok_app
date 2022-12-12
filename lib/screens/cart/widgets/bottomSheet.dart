@@ -1,10 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/screens/cart/cart_view_model.dart';
 import 'package:ecitykiosk/utils/app_colors.dart';
 import 'package:ecitykiosk/utils/common_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../payments/payment_mode/payment_mode_screen.dart';
 
 class BottomSheetWidgets extends StatelessWidget {
   const BottomSheetWidgets({Key? key}) : super(key: key);
@@ -41,9 +40,9 @@ class BottomSheetWidgets extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "SubTotal",
-                  style: TextStyle(
+                Text(
+                  "sub_total".tr(),
+                  style: const TextStyle(
                     fontFamily: "Josefin_Sans",
                     fontWeight: FontWeight.w300,
                     fontSize: 20,
@@ -65,9 +64,9 @@ class BottomSheetWidgets extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Total",
-                  style: TextStyle(
+                Text(
+                  "total".tr(),
+                  style: const TextStyle(
                     fontFamily: "Josefin_Sans",
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
@@ -95,9 +94,9 @@ class BottomSheetWidgets extends StatelessWidget {
                         MaterialStateProperty.all<Color>(Colors.white),
                     fixedSize: MaterialStateProperty.all<Size>(
                         Size(MediaQuery.of(context).size.width, 50))),
-                child: const Text(
-                  "CHECKOUT",
-                  style: TextStyle(
+                child: Text(
+                  "checkout".tr(),
+                  style: const TextStyle(
                       color: AppColors.appColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,

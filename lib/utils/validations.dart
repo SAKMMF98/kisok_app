@@ -1,11 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
+
 mixin CommonValidations {
   static const int passwordMinLength = 6;
 
   String? isValidPassword(String? password) {
     if (password == null || password.isEmpty) {
-      return "Password cannot be empty";
+      return "${"password".tr()} ${"can_not_be_empty".tr()}";
     } else if (password.length < passwordMinLength) {
-      return "Password should be at least $passwordMinLength characters long";
+      return "password_must_be_six_digit".tr();
     } else {
       return null;
     }
@@ -13,7 +15,7 @@ mixin CommonValidations {
 
   String? isValidEmail(String? email) {
     if (email == null || email.isEmpty) {
-      return "Email cannot be empty";
+      return "${"email".tr()} ${"can_not_be_empty".tr()}";
     }
 
     final isValid = RegExp(
@@ -23,18 +25,18 @@ mixin CommonValidations {
     if (isValid) {
       return null;
     } else {
-      return "Entered Email is not valid";
+      return "enter_email_not_valid".tr();
     }
   }
 
   String? isConfirmPasswordValid(String? password, String? confirmPassword) {
     if (confirmPassword == null || confirmPassword.isEmpty) {
-      return "Confirm Password cannot be empty";
+      return "${"confirm_password".tr()} ${"can_not_be_empty".tr()}";
     }
     if (confirmPassword.trim() == password?.trim()) {
       return null;
     } else {
-      return "Passwords do not match";
+      return "passwords_does_not_matched".tr();
     }
   }
 
@@ -43,11 +45,11 @@ mixin CommonValidations {
     RegExp regExp = RegExp(pattern);
 
     if (name == null || name.isEmpty) {
-      return "$fieldName cannot be empty";
+      return "$fieldName ${"can_not_be_empty".tr()}";
     }
 
     if (!regExp.hasMatch(name.trim())) {
-      return "Please enter a valid $fieldName";
+      return "${"please_enter_a_valid".tr()} $fieldName";
     } else {
       return null;
     }
@@ -55,7 +57,7 @@ mixin CommonValidations {
 
   String? isNotEmpty(String? value, String? fieldName) {
     if (value == null || value.isEmpty) {
-      return "$fieldName cannot be empty";
+      return "$fieldName ${"can_not_be_empty".tr()}";
     } else {
       return null;
     }
@@ -65,7 +67,7 @@ mixin CommonValidations {
 String? Function(String? value) createEmptyValidator(String fieldName) {
   return (String? value) {
     if (value?.isEmpty == true) {
-      return "$fieldName cannot be empty";
+      return "$fieldName ${"can_not_be_empty".tr()}";
     } else {
       return null;
     }

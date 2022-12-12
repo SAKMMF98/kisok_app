@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/cart_model.dart';
 import 'package:ecitykiosk/screens/cart/cart_view_model.dart';
 import 'package:ecitykiosk/utils/app_colors.dart';
@@ -92,7 +93,7 @@ class CartItem extends StatelessWidget {
                               color: Color(0xFF717171)),
                         ),
                         Text(
-                          item.name ?? "Product Name",
+                          item.name ?? "",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -106,9 +107,9 @@ class CartItem extends StatelessWidget {
                           return Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text(
-                                "Qty",
-                                style: TextStyle(
+                              Text(
+                                "qty".tr(),
+                                style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
                                     color: Color(0xFF717171)),

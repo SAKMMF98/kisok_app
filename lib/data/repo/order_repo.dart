@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/data/remote/end_points.dart';
 import 'package:ecitykiosk/data/remote/http_access.dart';
 import 'package:ecitykiosk/data/remote/response.dart';
@@ -13,8 +14,8 @@ class OrderRepo {
     String message = responseJson.containsKey("message")
         ? responseJson["message"]
         : isSuccess
-            ? "Order Placed Successfully!!"
-            : "Something Went Wrong!";
+            ? "order_placed_successfully".tr()
+            : "something_went_wrong".tr();
     return Response(
       isSuccess,
       message,
@@ -35,8 +36,8 @@ class OrderRepo {
     String message = responseJson.containsKey("message")
         ? responseJson["message"]
         : isSuccess
-            ? "Order Placed Successfully!!"
-            : "Something Went Wrong!";
+            ? "order_placed_successfully".tr()
+            : "something_went_wrong".tr();
     return Response(
         isSuccess,
         message,
@@ -56,8 +57,8 @@ class OrderRepo {
     String message = responseJson.containsKey("message")
         ? responseJson["message"]
         : isSuccess
-            ? "Payment Done Successfully!!"
-            : "Something Went Wrong!";
+            ? "payment_done_successfully".tr()
+            : "something_went_wrong".tr();
     return Response(isSuccess, message, "");
   }
 }

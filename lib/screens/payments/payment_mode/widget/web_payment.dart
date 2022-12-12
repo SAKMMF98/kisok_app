@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentWeb extends StatefulWidget {
   const PaymentWeb({Key? key}) : super(key: key);
@@ -86,124 +85,125 @@ class _PaymentWebState extends State<PaymentWeb> {
       },
       child: SafeArea(
         child: Scaffold(
-            body: Stack(
-          children: [
-            InAppWebView(
-              key: webViewKey,
-              initialUrlRequest:
-                  URLRequest(url: Uri.parse(paymentData["initialUrl"]!)),
-              initialUserScripts: UnmodifiableListView<UserScript>([]),
-              initialOptions: options,
-              onWebViewCreated: (controller) {
-                webViewController = controller;
-              },
-              onLoadStart: (controller, url) {
-                currentUrl = url.toString();
-                progress.value = 0;
-                error.value = null;
-                if (url.toString() == returnUr) {
-                  errorToast(msg: "Payment Failed!!");
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, HomeScreen.routeName, (route) => false);
-                }
-              },
-              androidOnPermissionRequest:
-                  (controller, origin, resources) async {
-                return PermissionRequestResponse(
-                    resources: resources,
-                    action: PermissionRequestResponseAction.GRANT);
-              },
-              shouldOverrideUrlLoading: (controller, navigationAction) async {
-                var uri = navigationAction.request.url;
-                if (![
-                  "http",
-                  "https",
-                  "file",
-                  "chrome",
-                  "data",
-                  "javascript",
-                  "about"
-                ].contains(uri!.scheme)) {
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri);
-                    return NavigationActionPolicy.CANCEL;
+          body: Stack(
+            children: [
+              InAppWebView(
+                key: webViewKey,
+                initialUrlRequest:
+                    URLRequest(url: Uri.parse(paymentData["initialUrl"]!)),
+                initialUserScripts: UnmodifiableListView<UserScript>([]),
+                initialOptions: options,
+                onWebViewCreated: (controller) {
+                  webViewController = controller;
+                },
+                onLoadStart: (controller, url) {
+                  currentUrl = url.toString();
+                  progress.value = 0;
+                  error.value = null;
+                  if (url.toString() == returnUr) {
+                    errorToast(msg: "Payment Failed!!");
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, HomeScreen.routeName, (route) => false);
                   }
-                }
-                return NavigationActionPolicy.ALLOW;
-              },
-              onLoadStop: (controller, url) async {
-                if (url.toString().contains(
-                        "https://secure.cinetpay.com/notifypay?csrf_token") &&
-                    onceDone) {
-                  context.read<PaymentModeViewModel>().checkPayment(
-                      txId: paymentData["txId"]!,
-                      orderId: paymentData["orderId"]!,
-                      userType: paymentData["userType"]!);
-                } else if (url.toString().contains(
-                    "https://secure.cinetpay.com/notifypay?csrf_token")) {
-                  onceDone = true;
-                  if (mounted) setState(() {});
-                }
-                // if (url.toString() == returnUr) {
-                //   webViewController.loadUrl(
-                //       urlRequest: URLRequest(url: Uri.parse(invoiceSuccess)));
-                //   context
-                //       .read<PaymentModeViewModel>()
-                //       .checkPayment(txId: paymentData["txId"]!);
-                // }
-                // else if (url.toString() == invoiceUrl) {
-                //   Future.delayed(const Duration(seconds: 3), () {
-                //     showToast(msg: "Order Done Successfully!!");
-                //     Navigator.pushNamedAndRemoveUntil(
-                //         context, HomeScreen.routeName, (route) => false);
-                //   });
-                // }
-              },
-              onLoadError: (controller, url, code, message) {
-                error.value = message;
-              },
-              onProgressChanged: (controller, data) {
-                progress.value = data;
-              },
-              onUpdateVisitedHistory: (controller, url, androidIsReload) {},
-              onConsoleMessage: (controller, consoleMessage) {},
-            ),
-            ValueListenableBuilder(
-                valueListenable: progress,
-                builder: (context, value, child) {
-                  return value != 100
-                      ? Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ), // Dialog background
-                          child: const CircularProgressIndicator(
-                            color: AppColors.appColor,
-                          ),
-                        )
-                      : const SizedBox.shrink();
-                }),
-            ValueListenableBuilder<String?>(
-                valueListenable: error,
-                builder: (context, showError, child) {
-                  return showError != null
-                      ? Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ), // Dialog background
-                          child: Text(
-                            showError,
-                            style: const TextStyle(fontSize: 18),
-                          ))
-                      : const SizedBox.shrink();
-                }),
-          ],
-        )),
+                },
+                androidOnPermissionRequest:
+                    (controller, origin, resources) async {
+                  return PermissionRequestResponse(
+                      resources: resources,
+                      action: PermissionRequestResponseAction.GRANT);
+                },
+                shouldOverrideUrlLoading: (controller, navigationAction) async {
+                  var uri = navigationAction.request.url;
+                  if (![
+                    "http",
+                    "https",
+                    "file",
+                    "chrome",
+                    "data",
+                    "javascript",
+                    "about"
+                  ].contains(uri!.scheme)) {
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri);
+                      return NavigationActionPolicy.CANCEL;
+                    }
+                  }
+                  return NavigationActionPolicy.ALLOW;
+                },
+                onLoadStop: (controller, url) async {
+                  if (url.toString().contains(
+                          "https://secure.cinetpay.com/notifypay?csrf_token") &&
+                      onceDone) {
+                    context.read<PaymentModeViewModel>().checkPayment(
+                        txId: paymentData["txId"]!,
+                        orderId: paymentData["orderId"]!,
+                        userType: paymentData["userType"]!);
+                  } else if (url.toString().contains(
+                      "https://secure.cinetpay.com/notifypay?csrf_token")) {
+                    onceDone = true;
+                    if (mounted) setState(() {});
+                  }
+                  // if (url.toString() == returnUr) {
+                  //   webViewController.loadUrl(
+                  //       urlRequest: URLRequest(url: Uri.parse(invoiceSuccess)));
+                  //   context
+                  //       .read<PaymentModeViewModel>()
+                  //       .checkPayment(txId: paymentData["txId"]!);
+                  // }
+                  // else if (url.toString() == invoiceUrl) {
+                  //   Future.delayed(const Duration(seconds: 3), () {
+                  //     showToast(msg: "Order Done Successfully!!");
+                  //     Navigator.pushNamedAndRemoveUntil(
+                  //         context, HomeScreen.routeName, (route) => false);
+                  //   });
+                  // }
+                },
+                onLoadError: (controller, url, code, message) {
+                  error.value = message;
+                },
+                onProgressChanged: (controller, data) {
+                  progress.value = data;
+                },
+                onUpdateVisitedHistory: (controller, url, androidIsReload) {},
+                onConsoleMessage: (controller, consoleMessage) {},
+              ),
+              ValueListenableBuilder(
+                  valueListenable: progress,
+                  builder: (context, value, child) {
+                    return value != 100
+                        ? Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ), // Dialog background
+                            child: const CircularProgressIndicator(
+                              color: AppColors.appColor,
+                            ),
+                          )
+                        : const SizedBox.shrink();
+                  }),
+              ValueListenableBuilder<String?>(
+                  valueListenable: error,
+                  builder: (context, showError, child) {
+                    return showError != null
+                        ? Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ), // Dialog background
+                            child: Text(
+                              showError,
+                              style: const TextStyle(fontSize: 18),
+                            ))
+                        : const SizedBox.shrink();
+                  }),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/screens/common/common_appBar.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/payment_mode_view_model.dart';
 import 'package:ecitykiosk/utils/app_colors.dart';
@@ -36,9 +37,9 @@ class _OtpScreenState extends State<OtpScreen> {
         Scaffold(
           backgroundColor: Colors.white,
           appBar: commonAppBar(
-              title: const Text(
-                "OTP Screen",
-                style: TextStyle(
+              title: Text(
+                "otp".tr(),
+                style: const TextStyle(
                     fontFamily: "Josefin_Sans",
                     fontSize: 22,
                     color: Colors.black,
@@ -49,8 +50,8 @@ class _OtpScreenState extends State<OtpScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Align(
                       alignment: Alignment.center,

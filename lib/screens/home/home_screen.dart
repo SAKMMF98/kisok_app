@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/banner_model.dart';
 import 'package:ecitykiosk/models/store_model.dart';
 import 'package:ecitykiosk/screens/common/common_appBar.dart';
@@ -8,6 +9,7 @@ import 'package:ecitykiosk/screens/stores/recent_stores/recent_stores_Screen.dar
 import 'package:ecitykiosk/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../utils/common_widgets.dart';
 import 'widgets/recent_shop_card.dart';
 
@@ -20,15 +22,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  final ScrollController _scrollController = ScrollController();
-
   @override
   initState() {
     getViewModel<HomeViewModel>(context, (HomeViewModel viewModel) {
       viewModel.getHomeDetails();
-    });
-    _scrollController.addListener(() {
-      // if (_scrollController.position.activity!.isScrolling) {}
     });
     super.initState();
   }
@@ -48,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           child: Stack(
             children: [
               SingleChildScrollView(
-                controller: _scrollController,
                 child: Column(
                   children: [
                     Selector<HomeViewModel, List<BannerModel>>(
@@ -57,9 +53,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           return allBanners.isNotEmpty
                               ? Column(
                                   children: [
-                                    header(
-                                        context,
-                                        "Enjoy the deals with exciting offers ",
+                                    header(context, "enjoy_the_deals_with".tr(),
                                         null, []),
                                     BannerShow(
                                       allBanner: allBanners,
@@ -74,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           return allStore.isNotEmpty
                               ? Column(
                                   children: [
-                                    header(context, "Shops",
+                                    header(context, "shops".tr(),
                                         RecentScreen.routeName, allStore),
                                     RecentShopCard(recent: allStore),
                                   ],
@@ -87,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           return recentStores.isNotEmpty
                               ? Column(
                                   children: [
-                                    header(context, "Recent Shops",
+                                    header(context, "recent_shops".tr(),
                                         RecentScreen.routeName, recentStores),
                                     RecentShopCard(recent: recentStores),
                                   ],
@@ -100,7 +94,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           return trendsStore.isNotEmpty
                               ? Column(
                                   children: [
-                                    header(context, "Latest Trends", null, []),
+                                    header(
+                                        context, "latest_shops".tr(), null, []),
                                     LatestTrendsCard(
                                         recent: context
                                             .read<HomeViewModel>()
@@ -130,19 +125,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            text,
-            style: const TextStyle(
-                fontFamily: "Josefin Sans Regular",
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-                color: Colors.black),
+          Expanded(
+            child: Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.visible,
+              style: const TextStyle(
+                  fontFamily: "Josefin Sans Regular",
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: Colors.black),
+            ),
           ),
           if (routeName != null)
             GestureDetector(
-              child: const Text(
-                "View All",
-                style: TextStyle(
+              child: Text(
+                "view_all".tr(),
+                style: const TextStyle(
                   decoration: TextDecoration.underline,
                   fontFamily: "Josefin Sans",
                   fontWeight: FontWeight.w400,

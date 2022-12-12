@@ -1,5 +1,6 @@
 import 'package:ecitykiosk/data/local/shared_pref_helper.dart';
 import 'package:ecitykiosk/screens/cart/cart_view_model.dart';
+import 'package:ecitykiosk/screens/language/language_screen.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/widget/show_invoice.dart';
 import 'package:ecitykiosk/screens/payments/payment_mode/widget/web_payment.dart';
 import 'package:ecitykiosk/screens/products/product_details/product_details_screen.dart';
@@ -32,6 +33,10 @@ class RouteHelper {
       HomeScreen.routeName: (_) => ChangeNotifierProvider(
             create: (_) => HomeViewModel(),
             child: const HomeScreen(),
+          ),
+      LanguageSelection.routeName: (_) => ChangeNotifierProvider(
+            create: (_) => HomeViewModel(),
+            child: const LanguageSelection(),
           ),
       ProductDetailsScreen.routeName: (_) => ChangeNotifierProvider(
             create: (_) => ProductDetailsViewModel(),
@@ -69,7 +74,9 @@ class RouteHelper {
   }
 
   String initialRoute() {
-    if (SharedPrefHelper.stayLoggedIn) {
+    if (!SharedPrefHelper.languageSelected) {
+      return LanguageSelection.routeName;
+    } else if (SharedPrefHelper.stayLoggedIn) {
       return HomeScreen.routeName;
     } else {
       return LoginScreen.routeName;

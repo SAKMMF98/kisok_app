@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/screens/login/widgets/textformfield.dart';
 import 'package:ecitykiosk/utils/validations.dart';
 import 'package:flutter/material.dart';
@@ -52,14 +53,16 @@ class CustomExpansion extends ExpansionPanel with CommonValidations {
                   child: Column(
                     children: [
                       TextCommonField(
-                        hintText: "Email Id",
+                        hintText: "email_id".tr(),
                         readOnly:
                             context.read<PaymentModeViewModel>().isLoading,
                         controller: context
                             .read<PaymentModeViewModel>()
                             .emailController,
                         inlineBorderColor: const Color(0xFF717171),
-                        validator: (val) {},
+                        validator: (val) {
+                          return null;
+                        },
                       ),
                       // if (image != "assets/images/coin.png")
                       //   Selector<PaymentModeViewModel, bool>(
@@ -94,7 +97,7 @@ class CustomExpansion extends ExpansionPanel with CommonValidations {
                       if (image == "assets/images/coin.png") ...[
                         TextCommonField(
                           inlineBorderColor: const Color(0xFF717171),
-                          hintText: "Name",
+                          hintText: "name".tr(),
                           readOnly:
                               context.read<PaymentModeViewModel>().isLoading,
                           controller: context
@@ -103,14 +106,16 @@ class CustomExpansion extends ExpansionPanel with CommonValidations {
                           validator: (val) {},
                         ),
                         TextCommonField(
-                          hintText: "Address",
+                          hintText: "address".tr(),
                           readOnly:
                               context.read<PaymentModeViewModel>().isLoading,
                           controller: context
                               .read<PaymentModeViewModel>()
                               .addressController,
                           inlineBorderColor: const Color(0xFF717171),
-                          validator: (val) {},
+                          validator: (val) {
+                            return null;
+                          },
                         ),
                       ]
                     ],

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/models/cart_model.dart';
 import 'package:ecitykiosk/screens/cart/cart_view_model.dart';
 import 'package:ecitykiosk/screens/common/common_appBar.dart';
@@ -33,7 +34,7 @@ class _CartScreenState extends State<CartScreen> {
       };
       viewModel.onEmpty = () {
         Navigator.pop(context);
-        showToast(msg: "Cart is empty, or product out of stock");
+        showToast(msg: "cart_is_empty_or_product_out_of_stock".tr());
       };
       viewModel.checkoutCall = () {
         if (viewModel.cartData != null) {
@@ -41,10 +42,10 @@ class _CartScreenState extends State<CartScreen> {
             Fluttertoast.cancel();
             Navigator.pushNamed(context, PaymentModeScreen.routeName);
           } else {
-            errorToast(msg: "Updating Your Cart!!");
+            errorToast(msg: "updating_your_card".tr());
           }
         } else {
-          errorToast(msg: "No Item Added In Your Cart!!");
+          errorToast(msg: "no_item_added_in_cart".tr());
         }
       };
     });
@@ -60,9 +61,9 @@ class _CartScreenState extends State<CartScreen> {
             children: [
               Scaffold(
                 appBar: commonAppBar(
-                    title: const Text(
-                      "Shopping Bag",
-                      style: TextStyle(
+                    title: Text(
+                      "shopping_bag".tr(),
+                      style: const TextStyle(
                           fontFamily: "Josefin_Sans",
                           fontWeight: FontWeight.w700,
                           fontSize: 22,
@@ -95,10 +96,10 @@ class _CartScreenState extends State<CartScreen> {
                               })
                           : isLoading
                               ? const SizedBox.shrink()
-                              : const Center(
+                              : Center(
                                   child: Text(
-                                    "Card Is Empty",
-                                    style: TextStyle(
+                                    "card_is_empty".tr(),
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w700,

@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/screens/login/login_viewmodel.dart';
-import 'package:ecitykiosk/utils/app_colors.dart';
 import 'package:ecitykiosk/utils/common_widgets.dart';
 import 'package:ecitykiosk/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../utils/validations.dart';
 import '../home/home_screen.dart';
 import 'widgets/commonButton.dart';
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> with CommonValidations {
       errorToast(msg: provider.snackBarText!);
     };
     provider.onSuccess = () {
-      showToast(msg: "Logged In Success!!");
+      showToast(msg: "logged_in_success".tr());
       Navigator.restorablePushNamedAndRemoveUntil(
           context, HomeScreen.routeName, (route) => false);
     };
@@ -71,9 +72,9 @@ class _LoginScreenState extends State<LoginScreen> with CommonValidations {
                                   context.read<LoginViewModel>().kioskId = val;
                                 },
                                 textInputAction: TextInputAction.next,
-                                hintText: "Enter Kiosk Id",
+                                hintText: "enter_kiosk_id".tr(),
                                 validator: (val) =>
-                                    isNotEmpty(val!, "Kiosk Id"),
+                                    isNotEmpty(val!, "kiosk_id".tr()),
                               ),
                               const SizedBox(
                                 height: 10,
@@ -82,9 +83,9 @@ class _LoginScreenState extends State<LoginScreen> with CommonValidations {
                                 onChanged: (val) {
                                   context.read<LoginViewModel>().password = val;
                                 },
-                                hintText: "Password",
+                                hintText: "password".tr(),
                                 validator: (val) =>
-                                    isNotEmpty(val!, "Password"),
+                                    isNotEmpty(val!, "password".tr()),
                               ),
                             ],
                           ),
@@ -95,21 +96,20 @@ class _LoginScreenState extends State<LoginScreen> with CommonValidations {
                       height: 30,
                     ),
                     CommonButton(
-                        child: const Text(
-                          "LOGIN",
-                          style: TextStyle(
-                              fontFamily: "Josefin Sans Regular",
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              fontSize: 18),
-                        ),
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            context
-                                .read<LoginViewModel>()
-                                .performLogin(context);
-                          }
-                        })
+                      child: Text(
+                        'login'.tr(),
+                        style: const TextStyle(
+                            fontFamily: "Josefin Sans Regular",
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            fontSize: 18),
+                      ),
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<LoginViewModel>().performLogin(context);
+                        }
+                      },
+                    )
                   ],
                 ),
               ),

@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecitykiosk/data/remote/response.dart';
 import 'package:ecitykiosk/data/repo/cart_repo.dart';
 import 'package:ecitykiosk/data/repo/product_repo.dart';
@@ -13,7 +12,6 @@ class ProductDetailsViewModel extends ViewModel {
   final _cartRepo = CartRepo();
   int _index = 0;
   VoidCallback? noActivityCall;
-  Timer? _timer;
   int _quantityIndex = 01;
   List<ProductColors>? _productColors;
   ProductSizes? _selectedSize;
@@ -128,13 +126,11 @@ class ProductDetailsViewModel extends ViewModel {
           }
         } else if (productDetails!.variants!.productSizes != null &&
             selectedSize == null) {
-          snackBarText = "Please Select Size First.";
+          snackBarText = "please_select_size".tr();
           onError?.call();
-          // allTranslations.text("select_size_message");
         } else if (productColors != null && selectedColor == null) {
-          snackBarText = "Please Select Color First.";
+          snackBarText = "please_select_color".tr();
           onError?.call();
-          // allTranslations.text("select_color_message");
         } else {
           Map<String, dynamic> body = {
             "product_id": productDetails!.id.toString(),
